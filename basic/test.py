@@ -1,5 +1,6 @@
 from __future__ import division
 
+import argparse
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from catch_ball import CatchBall
@@ -36,10 +37,15 @@ def animate(step):
 
 
 if __name__ == "__main__":
+    # args
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-m", "--model_path")
+    args = parser.parse_args()
+
     # environmet, agent
     env = CatchBall()
     agent = DQNAgent(env.enable_actions)
-    agent.load_model()
+    agent.load_model(args.model_path)
 
     # states
     win, lose = 0, 0
