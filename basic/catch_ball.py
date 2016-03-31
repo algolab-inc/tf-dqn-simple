@@ -3,21 +3,21 @@ import numpy as np
 
 class CatchBall:
     def __init__(self):
-        # set variables
+        # variables
         self.screen_n_rows = 8
         self.screen_n_cols = 8
         self.player_length = 3
         self.enable_actions = [0, 1, 2]
 
-        # reset states
+        # states
         self.reset()
 
-    def update(self, action_key):
+    def update(self, action):
         # update player position
-        if action_key == 1:
+        if action == 1:
             # move left
             self.player_col = max(0, self.player_col - 1)
-        elif action_key == 2:
+        elif action == 2:
             # move right
             self.player_col = min(self.player_col + 1, self.screen_n_cols - self.player_length)
         else:
@@ -36,7 +36,7 @@ class CatchBall:
                 # catch
                 self.reward = 1
             else:
-                # does not catch
+                # drop
                 self.reward = -1
 
     def draw(self):
@@ -53,8 +53,8 @@ class CatchBall:
         self.draw()
         return self.screen, self.reward, self.terminal
 
-    def action(self, action_key):
-        self.update(action_key)
+    def execute_action(self, action):
+        self.update(action)
 
     def reset(self):
         # reset player position

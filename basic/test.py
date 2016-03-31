@@ -12,29 +12,36 @@ def animate(step):
 
     if terminal:
         env.reset()
+
+        # for log
         if reward_t == 1:
             win += 1
         elif reward_t == -1:
             lose += 1
-        print("Win: {:03d}/{:03d} ({:.1f}%)".format(win, win + lose, 100 * win/(win+lose)))
+
+        print("WIN: {:03d}/{:03d} ({:.1f}%)".format(win, win + lose, 100 * win / (win + lose)))
     else:
         state_t = state_t_1
+
+        # execute action in environment
         action_t = agent.select_action(state_t, 0.0)
-        env.action(action_t)
+        env.execute_action(action_t)
 
+    # observe environment
     state_t_1, reward_t, terminal = env.observe()
-    img.set_array(state_t_1)
 
+    # animate image
+    img.set_array(state_t_1)
     return img,
 
 
 if __name__ == "__main__":
-    # initialize environmet and agent
+    # environmet, agent
     env = CatchBall()
     agent = DQNAgent(env.enable_actions)
     agent.load_model()
 
-    # initialize variables
+    # states
     win, lose = 0, 0
     state_t_1, reward_t, terminal = env.observe()
 
