@@ -21,7 +21,7 @@ if __name__ == "__main__":
 
         while not terminal:
             # frame
-            clock.tick(5)
+            clock.tick(env.frame_rate)
             env.execute_action(np.argmax(pygame.key.get_pressed()))
             _, reward, terminal = env.observe()
             pygame.display.flip()

@@ -8,6 +8,7 @@ class CatchBall:
         self.screen_n_cols = 8
         self.player_length = 3
         self.enable_actions = [0, 1, 2]
+        self.frame_rate = 5
 
         # states
         self.reset()

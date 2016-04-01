@@ -54,6 +54,6 @@ if __name__ == "__main__":
     # animate
     fig = plt.figure()
     img = plt.imshow(state_t_1, interpolation="none", cmap="gray")
-    ani = animation.FuncAnimation(fig, animate, interval=200, blit=True)
+    ani = animation.FuncAnimation(fig, animate, interval=(1000 / env.frame_rate), blit=True)
     plt.axis("off")
     plt.show()
