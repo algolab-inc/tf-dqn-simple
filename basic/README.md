@@ -1,4 +1,6 @@
 # Basic Example
+![demo](https://raw.githubusercontent.com/algolab-inc/tensorflow-deep-q-network/master/basic/demo.gif)
+
 ## Quick Start
 ```
 git clone https://github.com/algolab-inc/tensorflow-deep-q-network.git
@@ -25,3 +27,4 @@ python test.py -m models/trained/model.ckpt
 ## Requirements
 * TenforFlow
 * Matplotlib
+* ImageMagick (Optional)
