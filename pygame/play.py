@@ -16,20 +16,18 @@ if __name__ == "__main__":
     while playing:
         # reset
         env.reset()
-        _, reward, terminal = env.observe()
-        pygame.display.flip()
+        state, reward, terminal = env.observe()
 
         while not terminal:
-            # frame
-            clock.tick(env.frame_rate)
-            env.execute_action(np.argmax(pygame.key.get_pressed()))
-            _, reward, terminal = env.observe()
-            pygame.display.flip()
-
-            # quit
+            # stop playing
             for event in pygame.event.get():
                 if event.type == pygame.QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
                     playing = False
+
+            # update frame
+            clock.tick(env.frame_rate)
+            env.execute_action(np.argmax(pygame.key.get_pressed()))
+            state, reward, terminal = env.observe()
 
             # for log
             if reward == 1:

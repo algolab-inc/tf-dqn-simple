@@ -1,4 +1,4 @@
 models/*
-!models/trained
+!models/pretrained
 tmp/*
 !.gitkeep

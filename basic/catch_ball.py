@@ -3,7 +3,8 @@ import numpy as np
 
 class CatchBall:
     def __init__(self):
-        # variables
+        # parameters
+        self.name = "catchball"
         self.screen_n_rows = 8
         self.screen_n_cols = 8
         self.player_length = 3
@@ -41,7 +42,7 @@ class CatchBall:
                 self.reward = -1
 
     def draw(self):
-        # initialize screen
+        # reset screen
         self.screen = np.zeros((self.screen_n_rows, self.screen_n_cols))
 
         # draw player

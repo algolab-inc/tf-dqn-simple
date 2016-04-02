@@ -5,7 +5,8 @@ from pygame.locals import Rect, K_LEFT, K_RIGHT
 
 class CatchBall:
     def __init__(self):
-        # variables
+        # parameters
+        self.name = "catchball"
         self.unit_size = 32
         self.screen_width = 8 * self.unit_size
         self.screen_height = 8 * self.unit_size
@@ -51,7 +52,7 @@ class CatchBall:
                 self.reward = -1
 
     def draw(self):
-        # initialize screen
+        # reset screen
         self.screen.fill((0, 0, 0))
 
         # draw player
@@ -65,6 +66,8 @@ class CatchBall:
                 self.screen,
                 (255, 255, 255),
                 Rect(self.ball_x, self.ball_y, self.ball_width, self.ball_height))
+
+        pygame.display.flip()
 
     def observe(self):
         self.draw()

@@ -55,7 +55,7 @@ if __name__ == "__main__":
 
     # environmet, agent
     env = CatchBall()
-    agent = DQNAgent(env.enable_actions)
+    agent = DQNAgent(env.enable_actions, (env.screen_n_rows, env.screen_n_cols))
     agent.load_model(args.model_path)
 
     # states
@@ -63,13 +63,15 @@ if __name__ == "__main__":
     state_t_1, reward_t, terminal = env.observe()
 
     # animate
-    fig = plt.figure(figsize=(4, 4))
+    fig = plt.figure(figsize=(env.screen_n_rows / 2, env.screen_n_cols / 2))
+    fig.canvas.set_window_title("{}-{}".format(env.name, agent.name))
     img = plt.imshow(state_t_1, interpolation="none", cmap="gray")
     ani = animation.FuncAnimation(fig, animate, init_func=init, interval=(1000 / env.frame_rate), blit=True)
 
     if args.save:
         # save animation (requires ImageMagick)
-        ani_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "tmp", "demo.gif")
+        ani_path = os.path.join(
+                os.path.dirname(os.path.abspath(__file__)), "tmp", "demo-{}-{}.gif".format(env.name, agent.name))
         ani.save(ani_path, writer="imagemagick", fps=env.frame_rate)
     else:
         # show animation
