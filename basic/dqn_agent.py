@@ -1,7 +1,8 @@
-import tensorflow as tf
-import numpy as np
-import os
 from collections import deque
+import os
+
+import numpy as np
+import tensorflow as tf
 
 
 class DQNAgent:
@@ -28,7 +29,7 @@ class DQNAgent:
         # model
         self.init_model()
 
-        # states
+        # values
         self.current_loss = 0.0
 
     def init_model(self):
@@ -40,7 +41,7 @@ class DQNAgent:
 
         # fully connected layer (256 x 1)
         W_fc1 = tf.Variable(tf.truncated_normal([self.input_size[0] * self.input_size[1], 256], stddev=0.01))
-        b_fc1 = tf.Variable(tf.truncated_normal([256], stddev=0.01))
+        b_fc1 = tf.Variable(tf.constant(0.01, shape=[256]))
         h_fc1 = tf.nn.relu(tf.matmul(x_flat, W_fc1) + b_fc1)
 
         # output layer (n_actions x 1)
@@ -76,7 +77,7 @@ class DQNAgent:
             return self.enable_actions[np.argmax(self.Q_values(state))]
 
     def store_experience(self, state, action, reward, state_1, terminal):
-        self.D.append([state, action, reward, state_1, terminal])
+        self.D.append((state, action, reward, state_1, terminal))
         if len(self.D) > self.replay_memory_size:
             self.D.popleft()
 

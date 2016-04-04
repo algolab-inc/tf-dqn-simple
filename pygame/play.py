@@ -1,6 +1,7 @@
+import numpy as np
 import pygame
 from pygame.locals import KEYDOWN, K_ESCAPE
-import numpy as np
+
 from catch_ball import CatchBall
 
 
@@ -8,8 +9,9 @@ if __name__ == "__main__":
     # environment
     env = CatchBall()
     clock = pygame.time.Clock()
+    pygame.display.set_caption(env.name)
 
-    # states
+    # values
     win, lose = 0, 0
     playing = True
 

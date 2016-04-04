@@ -1,6 +1,6 @@
 import numpy as np
 import pygame
-from pygame.locals import Rect, K_LEFT, K_RIGHT
+from pygame.locals import K_LEFT, K_RIGHT, Rect
 
 
 class CatchBall:
@@ -14,17 +14,23 @@ class CatchBall:
         self.player_height = 1 * self.unit_size
         self.ball_width = 1 * self.unit_size
         self.ball_height = 1 * self.unit_size
-        self.enable_actions = [0, K_LEFT, K_RIGHT]
+        self.enable_actions = (0, K_LEFT, K_RIGHT)
         self.frame_rate = 5
 
         # pygame
         pygame.init()
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
 
-        # states
+        # values
         self.reset()
 
     def update(self, action):
+        """
+        action:
+            0:       do nothing
+            K_LEFT:  move left
+            L_RIGHT: move right
+        """
         # update player position
         if action == K_LEFT:
             # move left
@@ -39,7 +45,7 @@ class CatchBall:
         # update ball position
         self.ball_y += self.unit_size
 
-        # update other states
+        # update other values
         self.reward = 0
         self.terminal = False
         if self.ball_y == self.screen_height - self.unit_size:
@@ -67,11 +73,12 @@ class CatchBall:
                 (255, 255, 255),
                 Rect(self.ball_x, self.ball_y, self.ball_width, self.ball_height))
 
-        pygame.display.flip()
+        # update display
+        pygame.display.update()
 
     def observe(self):
         self.draw()
-        return self.screen, self.reward, self.terminal
+        return pygame.surfarray.array3d(pygame.display.get_surface()), self.reward, self.terminal
 
     def execute_action(self, action):
         self.update(action)
@@ -86,6 +93,6 @@ class CatchBall:
         self.ball_x = np.random.randint(self.screen_width / self.unit_size) * self.unit_size
         self.ball_y = 0
 
-        # reset other states
+        # reset other values
         self.reward = 0
         self.terminal = False

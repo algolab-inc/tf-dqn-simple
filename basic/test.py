@@ -1,9 +1,11 @@
 from __future__ import division
 
-import os
 import argparse
-import matplotlib.pyplot as plt
+import os
+
 import matplotlib.animation as animation
+import matplotlib.pyplot as plt
+
 from catch_ball import CatchBall
 from dqn_agent import DQNAgent
 
@@ -58,7 +60,7 @@ if __name__ == "__main__":
     agent = DQNAgent(env.enable_actions, (env.screen_n_rows, env.screen_n_cols))
     agent.load_model(args.model_path)
 
-    # states
+    # values
     win, lose = 0, 0
     state_t_1, reward_t, terminal = env.observe()
 
