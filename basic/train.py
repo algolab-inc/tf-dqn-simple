@@ -10,9 +10,9 @@ if __name__ == "__main__":
 
     # environment, agent
     env = CatchBall()
-    agent = DQNAgent(env.enable_actions, (env.screen_n_rows, env.screen_n_cols))
+    agent = DQNAgent(env.enable_actions)
 
-    # values
+    # variables
     win = 0
 
     for e in range(n_epochs):

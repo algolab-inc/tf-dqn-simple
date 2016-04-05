@@ -11,14 +11,14 @@ if __name__ == "__main__":
     clock = pygame.time.Clock()
     pygame.display.set_caption(env.name)
 
-    # values
+    # variables
     win, lose = 0, 0
     playing = True
 
     while playing:
         # reset
         env.reset()
-        state, reward, terminal = env.observe()
+        _, reward, terminal = env.observe()
 
         while not terminal:
             # stop playing
@@ -29,7 +29,7 @@ if __name__ == "__main__":
             # update frame
             clock.tick(env.frame_rate)
             env.execute_action(np.argmax(pygame.key.get_pressed()))
-            state, reward, terminal = env.observe()
+            _, reward, terminal = env.observe()
 
             # for log
             if reward == 1:

@@ -21,7 +21,7 @@ class CatchBall:
         pygame.init()
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
 
-        # values
+        # variables
         self.reset()
 
     def update(self, action):
@@ -32,10 +32,10 @@ class CatchBall:
             L_RIGHT: move right
         """
         # update player position
-        if action == K_LEFT:
+        if action == self.enable_actions[1]:
             # move left
             self.player_x = max(0, self.player_x - self.unit_size)
-        elif action == K_RIGHT:
+        elif action == self.enable_actions[2]:
             # move right
             self.player_x = min(self.player_x + self.unit_size, self.screen_width - self.player_width)
         else:
@@ -45,7 +45,7 @@ class CatchBall:
         # update ball position
         self.ball_y += self.unit_size
 
-        # update other values
+        # update other variables
         self.reward = 0
         self.terminal = False
         if self.ball_y == self.screen_height - self.unit_size:
@@ -63,15 +63,15 @@ class CatchBall:
 
         # draw player
         pygame.draw.rect(
-                self.screen,
-                (255, 255, 255),
-                Rect(self.player_x, self.player_y, self.player_width, self.player_height))
+            self.screen,
+            (255, 255, 255),
+            Rect(self.player_x, self.player_y, self.player_width, self.player_height))
 
         # draw ball
         pygame.draw.rect(
-                self.screen,
-                (255, 255, 255),
-                Rect(self.ball_x, self.ball_y, self.ball_width, self.ball_height))
+            self.screen,
+            (255, 255, 255),
+            Rect(self.ball_x, self.ball_y, self.ball_width, self.ball_height))
 
         # update display
         pygame.display.update()
@@ -86,13 +86,13 @@ class CatchBall:
     def reset(self):
         # reset player position
         self.player_x = np.random.randint(
-                (self.screen_width - self.player_width) / self.unit_size) * self.unit_size
+            (self.screen_width - self.player_width) / self.unit_size) * self.unit_size
         self.player_y = self.screen_height - self.player_height
 
         # reset ball position
         self.ball_x = np.random.randint(self.screen_width / self.unit_size) * self.unit_size
         self.ball_y = 0
 
-        # reset other values
+        # reset other variables
         self.reward = 0
         self.terminal = False

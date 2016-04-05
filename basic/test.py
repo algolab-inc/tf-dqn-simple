@@ -57,10 +57,10 @@ if __name__ == "__main__":
 
     # environmet, agent
     env = CatchBall()
-    agent = DQNAgent(env.enable_actions, (env.screen_n_rows, env.screen_n_cols))
+    agent = DQNAgent(env.enable_actions)
     agent.load_model(args.model_path)
 
-    # values
+    # variables
     win, lose = 0, 0
     state_t_1, reward_t, terminal = env.observe()
 
@@ -73,7 +73,7 @@ if __name__ == "__main__":
     if args.save:
         # save animation (requires ImageMagick)
         ani_path = os.path.join(
-                os.path.dirname(os.path.abspath(__file__)), "tmp", "demo-{}-{}.gif".format(env.name, agent.name))
+            os.path.dirname(os.path.abspath(__file__)), "tmp", "demo-{}-{}.gif".format(env.name, agent.name))
         ani.save(ani_path, writer="imagemagick", fps=env.frame_rate)
     else:
         # show animation

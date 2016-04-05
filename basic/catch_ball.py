@@ -11,7 +11,7 @@ class CatchBall:
         self.enable_actions = (0, 1, 2)
         self.frame_rate = 5
 
-        # values
+        # variables
         self.reset()
 
     def update(self, action):
@@ -22,10 +22,10 @@ class CatchBall:
             2: move right
         """
         # update player position
-        if action == 1:
+        if action == self.enable_actions[1]:
             # move left
             self.player_col = max(0, self.player_col - 1)
-        elif action == 2:
+        elif action == self.enable_actions[2]:
             # move right
             self.player_col = min(self.player_col + 1, self.screen_n_cols - self.player_length)
         else:
@@ -35,7 +35,7 @@ class CatchBall:
         # update ball position
         self.ball_row += 1
 
-        # update other values
+        # update other variables
         self.reward = 0
         self.terminal = False
         if self.ball_row == self.screen_n_rows - 1:
@@ -73,6 +73,6 @@ class CatchBall:
         self.ball_row = 0
         self.ball_col = np.random.randint(self.screen_n_cols)
 
-        # reset other values
+        # reset other variables
         self.reward = 0
         self.terminal = False

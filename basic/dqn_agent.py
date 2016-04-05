@@ -10,10 +10,9 @@ class DQNAgent:
     Multi Layer Perceptron with Experience Replay
     """
 
-    def __init__(self, enable_actions, input_size):
+    def __init__(self, enable_actions):
         # parameters
         self.name = "dqn"
-        self.input_size = input_size
         self.enable_actions = enable_actions
         self.n_actions = len(self.enable_actions)
         self.minibatch_size = 32
@@ -29,24 +28,24 @@ class DQNAgent:
         # model
         self.init_model()
 
-        # values
+        # variables
         self.current_loss = 0.0
 
     def init_model(self):
-        # input layer (input_n_rows x input_n_cols)
-        self.x = tf.placeholder(tf.float32, [None, self.input_size[0], self.input_size[1]])
+        # input layer (8 x 8)
+        self.x = tf.placeholder(tf.float32, [None, 8, 8])
 
-        # flatten ((input_n_rows * input_n_cols) x 1)
-        x_flat = tf.reshape(self.x, [-1, self.input_size[0] * self.input_size[1]])
+        # flatten (64)
+        x_flat = tf.reshape(self.x, [-1, 64])
 
-        # fully connected layer (256 x 1)
-        W_fc1 = tf.Variable(tf.truncated_normal([self.input_size[0] * self.input_size[1], 256], stddev=0.01))
-        b_fc1 = tf.Variable(tf.constant(0.01, shape=[256]))
+        # fully connected layer (32)
+        W_fc1 = tf.Variable(tf.truncated_normal([64, 64], stddev=0.01))
+        b_fc1 = tf.Variable(tf.zeros([64]))
         h_fc1 = tf.nn.relu(tf.matmul(x_flat, W_fc1) + b_fc1)
 
-        # output layer (n_actions x 1)
-        W_out = tf.Variable(tf.truncated_normal([256, self.n_actions], stddev=0.01))
-        b_out = tf.Variable(tf.truncated_normal([self.n_actions], stddev=0.01))
+        # output layer (n_actions)
+        W_out = tf.Variable(tf.truncated_normal([64, self.n_actions], stddev=0.01))
+        b_out = tf.Variable(tf.zeros([self.n_actions]))
         self.y = tf.matmul(h_fc1, W_out) + b_out
 
         # loss function
@@ -91,14 +90,15 @@ class DQNAgent:
 
         for j in minibatch_indexes:
             state_j, action_j, reward_j, state_j_1, terminal = self.D[j]
+            action_j_index = self.enable_actions.index(action_j)
 
             y_j = self.Q_values(state_j)
 
             if terminal:
-                y_j[action_j] = reward_j
+                y_j[action_j_index] = reward_j
             else:
                 # reward_j + gamma * max_action' Q(state', action')
-                y_j[action_j] = reward_j + self.discount_factor * np.max(self.Q_values(state_j_1))
+                y_j[action_j_index] = reward_j + self.discount_factor * np.max(self.Q_values(state_j_1))
 
             state_minibatch.append(state_j)
             y_minibatch.append(y_j)
