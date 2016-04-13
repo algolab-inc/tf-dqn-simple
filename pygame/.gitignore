@@ -1,3 +1,4 @@
-models/*
+models/catch_ball/*
+models/pin_ball/*
 tmp/*
 !.gitkeep

@@ -10,9 +10,10 @@ class DQNAgent:
     Multi Layer Perceptron with Experience Replay
     """
 
-    def __init__(self, enable_actions):
+    def __init__(self, enable_actions, environment_name):
         # parameters
         self.name = os.path.splitext(os.path.basename(__file__))[0]
+        self.environment_name = environment_name
         self.enable_actions = enable_actions
         self.n_actions = len(self.enable_actions)
         self.minibatch_size = 32
@@ -20,7 +21,7 @@ class DQNAgent:
         self.learning_rate = 0.001
         self.discount_factor = 0.9
         self.exploration = 0.1
-        self.model_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models")
+        self.model_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models", self.environment_name)
 
         # replay memory
         self.D = deque()

@@ -10,7 +10,7 @@ if __name__ == "__main__":
 
     # environment, agent
     env = CatchBall()
-    agent = DQNAgent(env.enable_actions)
+    agent = DQNAgent(env.enable_actions, env.name)
 
     # variables
     win = 0

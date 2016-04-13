@@ -57,7 +57,7 @@ if __name__ == "__main__":
 
     # environmet, agent
     env = CatchBall()
-    agent = DQNAgent(env.enable_actions)
+    agent = DQNAgent(env.enable_actions, env.name)
     agent.load_model(args.model_path)
 
     # variables

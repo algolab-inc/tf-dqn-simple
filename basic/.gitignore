@@ -1,4 +1,3 @@
-models/*
-!models/pretrained
+models/catch_ball/*
 tmp/*
 !.gitkeep
