@@ -1,10 +1,11 @@
+import os
 import numpy as np
 
 
 class CatchBall:
     def __init__(self):
         # parameters
-        self.name = "catchball"
+        self.name = os.path.splitext(os.path.basename(__file__))[0]
         self.screen_n_rows = 8
         self.screen_n_cols = 8
         self.player_length = 3
@@ -35,7 +36,7 @@ class CatchBall:
         # update ball position
         self.ball_row += 1
 
-        # update other variables
+        # collision detection
         self.reward = 0
         self.terminal = False
         if self.ball_row == self.screen_n_rows - 1:

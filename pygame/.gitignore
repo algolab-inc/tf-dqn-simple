@@ -1,4 +1,3 @@
 models/*
-!models/pretrained
 tmp/*
 !.gitkeep

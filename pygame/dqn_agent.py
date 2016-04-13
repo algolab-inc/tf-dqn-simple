@@ -7,20 +7,26 @@ import tensorflow as tf
 
 class DQNAgent:
     """
-    Multi Layer Perceptron with Experience Replay
+    Convolutional Neural Network with Experience Replay
     """
 
-    def __init__(self, enable_actions):
+    def __init__(self, enable_actions, environment_name):
         # parameters
         self.name = os.path.splitext(os.path.basename(__file__))[0]
+        self.environment_name = environment_name
         self.enable_actions = enable_actions
         self.n_actions = len(self.enable_actions)
-        self.minibatch_size = 32
-        self.replay_memory_size = 1000
-        self.learning_rate = 0.001
-        self.discount_factor = 0.9
-        self.exploration = 0.1
-        self.model_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models")
+        self.minibatch_size = 32            # original: 32
+        self.replay_memory_size = 1000      # original: 1,000,000
+        self.replay_start_size = 0          # original: 50,000
+        self.target_update_frequency = 1    # original; 10,000
+        self.learning_rate = 0.001          # original: 0.00025
+        self.momentum = 0.0                 # original: 0.95
+        self.discount_factor = 0.9          # original: 0.99
+        self.initial_exploration = 0.1      # original: 0.1
+        self.final_exploration = 0.1        # original: 1.0
+        self.exploration_size = 1000000     # original: 1,000,000
+        self.model_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models", self.environment_name)
 
         # replay memory
         self.D = deque()
@@ -32,28 +38,43 @@ class DQNAgent:
         self.current_loss = 0.0
 
     def init_model(self):
-        # input layer (8 x 8)
-        self.x = tf.placeholder(tf.float32, [None, 8, 8])
+        # input layer (84 x 84 x 4)
+        self.x = tf.placeholder(tf.float32, [None, 84, 84, 4])
 
-        # flatten (64)
-        x_flat = tf.reshape(self.x, [-1, 64])
+        # convolution layer 1 (20 x 20 x 32)
+        W_conv1 = tf.Variable(tf.truncated_normal([8, 8, 4, 32], stddev=0.01))
+        b_conv1 = tf.Variable(tf.zeros([32]))
+        h_conv1 = tf.nn.relu(tf.nn.conv2d(self.x, W_conv1, strides=[1, 4, 4, 1], padding="VALID") + b_conv1)
 
-        # fully connected layer (32)
-        W_fc1 = tf.Variable(tf.truncated_normal([64, 64], stddev=0.01))
-        b_fc1 = tf.Variable(tf.zeros([64]))
-        h_fc1 = tf.nn.relu(tf.matmul(x_flat, W_fc1) + b_fc1)
+        # convolution layer 2 (9 x 9 x 64)
+        W_conv2 = tf.Variable(tf.truncated_normal([4, 4, 32, 64], stddev=0.01))
+        b_conv2 = tf.Variable(tf.zeros([64]))
+        h_conv2 = tf.nn.relu(tf.nn.conv2d(h_conv1, W_conv2, strides=[1, 2, 2, 1], padding="VALID") + b_conv2)
+
+        # convolution layer 3 (7 x 7 x 64)
+        W_conv3 = tf.Variable(tf.truncated_normal([3, 3, 64, 64], stddev=0.01))
+        b_conv3 = tf.Variable(tf.zeros([64]))
+        h_conv3 = tf.nn.relu(tf.nn.conv2d(h_conv2, W_conv3, strides=[1, 1, 1, 1], padding="VALID") + b_conv3)
+
+        # flatten (3136)
+        h_conv3_flat = tf.reshape(h_conv3, [-1, 3136])
+
+        # fully connected layer (512)
+        W_fc4 = tf.Variable(tf.truncated_normal([3136, 512], stddev=0.01))
+        b_fc4 = tf.Variable(tf.zeros([512]))
+        h_fc4 = tf.nn.relu(tf.matmul(h_conv3_flat, W_fc4) + b_fc4)
 
         # output layer (n_actions)
-        W_out = tf.Variable(tf.truncated_normal([64, self.n_actions], stddev=0.01))
+        W_out = tf.Variable(tf.truncated_normal([512, self.n_actions], stddev=0.01))
         b_out = tf.Variable(tf.zeros([self.n_actions]))
-        self.y = tf.matmul(h_fc1, W_out) + b_out
+        self.y = tf.matmul(h_fc4, W_out) + b_out
 
         # loss function
         self.y_ = tf.placeholder(tf.float32, [None, self.n_actions])
         self.loss = tf.reduce_mean(tf.square(self.y_ - self.y))
 
         # train operation
-        optimizer = tf.train.RMSPropOptimizer(self.learning_rate)
+        optimizer = tf.train.RMSPropOptimizer(self.learning_rate, momentum=self.momentum)
         self.training = optimizer.minimize(self.loss)
 
         # saver
@@ -74,6 +95,10 @@ class DQNAgent:
         else:
             # max_action Q(state, action)
             return self.enable_actions[np.argmax(self.Q_values(state))]
+
+    def current_epsilon(self, global_step):
+        annealing = (self.initial_exploration - self.final_exploration) / self.exploration_size * global_step
+        return max(self.initial_exploration - annealing, self.final_exploration)
 
     def store_experience(self, state, action, reward, state_1, terminal):
         self.D.append((state, action, reward, state_1, terminal))
@@ -110,14 +135,20 @@ class DQNAgent:
         self.current_loss = self.sess.run(self.loss, feed_dict={self.x: state_minibatch, self.y_: y_minibatch})
 
     def load_model(self, model_path=None):
+        global_step = 0
+
         if model_path:
             # load from model_path
             self.saver.restore(self.sess, model_path)
+            global_step = int(model_path.split("-")[-1])
         else:
             # load from checkpoint
             checkpoint = tf.train.get_checkpoint_state(self.model_dir)
             if checkpoint and checkpoint.model_checkpoint_path:
                 self.saver.restore(self.sess, checkpoint.model_checkpoint_path)
+                global_step = int(checkpoint.model_checkpoint_path.split("-")[-1])
 
-    def save_model(self, model_name="model.ckpt"):
-        self.saver.save(self.sess, os.path.join(self.model_dir, model_name))
+        return global_step
+
+    def save_model(self, model_name="model.ckpt", global_step=0):
+        self.saver.save(self.sess, os.path.join(self.model_dir, model_name), global_step=global_step)
