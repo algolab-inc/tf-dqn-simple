@@ -17,16 +17,17 @@ class DQNAgent:
         self.enable_actions = enable_actions
         self.n_actions = len(self.enable_actions)
         self.minibatch_size = 32            # original: 32
-        self.replay_memory_size = 1000      # original: 1,000,000
-        self.replay_start_size = 0          # original: 50,000
+        self.replay_memory_size = 50000     # original: 1,000,000
+        self.replay_start_size = 10000      # original: 50,000
         self.target_update_frequency = 1    # original; 10,000
-        self.learning_rate = 0.001          # original: 0.00025
+        self.learning_rate = 1e-6           # original: 0.00025
         self.momentum = 0.0                 # original: 0.95
-        self.discount_factor = 0.9          # original: 0.99
+        self.discount_factor = 0.99         # original: 0.99
         self.initial_exploration = 0.1      # original: 0.1
         self.final_exploration = 0.1        # original: 1.0
         self.exploration_size = 1000000     # original: 1,000,000
         self.model_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models", self.environment_name)
+        self.model_name = "{}.ckpt".format(self.environment_name)
 
         # replay memory
         self.D = deque()
@@ -150,5 +151,5 @@ class DQNAgent:
 
         return global_step
 
-    def save_model(self, model_name="model.ckpt", global_step=0):
-        self.saver.save(self.sess, os.path.join(self.model_dir, model_name), global_step=global_step)
+    def save_model(self, global_step=0):
+        self.saver.save(self.sess, os.path.join(self.model_dir, self.model_name), global_step=global_step)

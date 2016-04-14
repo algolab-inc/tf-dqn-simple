@@ -47,11 +47,12 @@ if __name__ == "__main__":
             agent.store_experience(state_t, action_t, reward_t, state_t_1, terminal)
 
             # experience replay
+            # TODO: check target_update_frequency
             if global_step > agent.replay_start_size and global_step % agent.target_update_frequency == 0:
                 agent.experience_replay()
 
             # logging
-            print("STEP: {:d} | EPSILON: {:.4f} | ACTION: {} | REWARD: {:>2} | LOSS: {:.4f} | Q_MAX: {:.4f}".format(
+            print("STEP: {:d} | EPSILON: {:.4f} | ACTION: {:>3} | REWARD: {:>2} | LOSS: {:.4f} | Q_MAX: {:.4f}".format(
                 global_step, epsilon_t, action_t, reward_t, agent.current_loss, np.max(agent.Q_values(state_t))))
 
             # update step
@@ -59,4 +60,4 @@ if __name__ == "__main__":
 
             # save model
             if global_step % 1000 == 0:
-                agent.save_model("{}-{}.ckpt".format(env.name, agent.name), global_step)
+                agent.save_model(global_step)

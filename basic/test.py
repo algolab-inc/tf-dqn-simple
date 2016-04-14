@@ -73,7 +73,7 @@ if __name__ == "__main__":
     if args.save:
         # save animation (requires ImageMagick)
         ani_path = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)), "tmp", "demo-{}-{}.gif".format(env.name, agent.name))
+            os.path.dirname(os.path.abspath(__file__)), "tmp", "demo-{}.gif".format(env.name))
         ani.save(ani_path, writer="imagemagick", fps=env.frame_rate)
     else:
         # show animation

@@ -50,4 +50,4 @@ if __name__ == "__main__":
             e, n_epochs - 1, win, loss / frame, Q_max / frame))
 
     # save model
-    agent.save_model("{}-{}.ckpt".format(env.name, agent.name))
+    agent.save_model()

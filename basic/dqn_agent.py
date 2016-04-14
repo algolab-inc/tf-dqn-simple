@@ -22,6 +22,7 @@ class DQNAgent:
         self.discount_factor = 0.9
         self.exploration = 0.1
         self.model_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models", self.environment_name)
+        self.model_name = "{}.ckpt".format(self.environment_name)
 
         # replay memory
         self.D = deque()
@@ -120,5 +121,5 @@ class DQNAgent:
             if checkpoint and checkpoint.model_checkpoint_path:
                 self.saver.restore(self.sess, checkpoint.model_checkpoint_path)
 
-    def save_model(self, model_name="model.ckpt"):
-        self.saver.save(self.sess, os.path.join(self.model_dir, model_name))
+    def save_model(self):
+        self.saver.save(self.sess, os.path.join(self.model_dir, self.model_name))
