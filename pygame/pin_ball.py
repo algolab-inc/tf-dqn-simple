@@ -23,6 +23,7 @@ class PinBall:
 
         # pygame
         pygame.init()
+        pygame.display.set_caption(self.name)
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
 
         # variables

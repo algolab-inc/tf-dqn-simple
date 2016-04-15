@@ -17,7 +17,6 @@ if __name__ == "__main__":
     # environment
     env = eval(args.environment)()
     clock = pygame.time.Clock()
-    pygame.display.set_caption(env.name)
 
     # variables
     playing = True

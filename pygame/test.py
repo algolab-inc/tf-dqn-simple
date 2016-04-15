@@ -23,7 +23,6 @@ if __name__ == "__main__":
     agent = DQNAgent(env.enable_actions, env.name)
     agent.load_model(args.model_path)
     clock = pygame.time.Clock()
-    pygame.display.set_caption(env.name)
 
     # variables
     testing = True
@@ -31,10 +30,10 @@ if __name__ == "__main__":
     while testing:
         # reset
         env.reset()
-        x_t_1, reward_t, terminal = env.observe()
-        x_t_1 = cv2.cvtColor(cv2.resize(x_t_1, (84, 84)), cv2.COLOR_BGR2GRAY)
-        _, x_t_1 = cv2.threshold(x_t_1, 1, 255, cv2.THRESH_BINARY)
-        state_t_1 = np.stack((x_t_1, x_t_1, x_t_1, x_t_1), axis=2)
+        screen_t_1, reward_t, terminal = env.observe()
+        screen_t_1 = cv2.cvtColor(cv2.resize(screen_t_1, (84, 84)), cv2.COLOR_BGR2GRAY)
+        _, screen_t_1 = cv2.threshold(screen_t_1, 1, 255, cv2.THRESH_BINARY)
+        state_t_1 = np.stack((screen_t_1, screen_t_1, screen_t_1, screen_t_1), axis=2)
 
         while not terminal:
             clock.tick(env.frame_rate)
@@ -45,10 +44,10 @@ if __name__ == "__main__":
             env.execute_action(action_t)
 
             # observe environment
-            x_t_1, reward_t, terminal = env.observe()
-            x_t_1 = cv2.cvtColor(cv2.resize(x_t_1, (84, 84)), cv2.COLOR_BGR2GRAY)
-            _, x_t_1 = cv2.threshold(x_t_1, 1, 255, cv2.THRESH_BINARY)
-            x_t_1 = np.reshape(x_t_1, (84, 84, 1))
-            state_t_1 = np.append(x_t_1, state_t[:, :, :3], axis=2)
+            screen_t_1, reward_t, terminal = env.observe()
+            screen_t_1 = cv2.cvtColor(cv2.resize(screen_t_1, (84, 84)), cv2.COLOR_BGR2GRAY)
+            _, screen_t_1 = cv2.threshold(screen_t_1, 1, 255, cv2.THRESH_BINARY)
+            screen_t_1 = np.reshape(screen_t_1, (84, 84, 1))
+            state_t_1 = np.append(screen_t_1, state_t[:, :, :3], axis=2)
 
     pygame.quit()

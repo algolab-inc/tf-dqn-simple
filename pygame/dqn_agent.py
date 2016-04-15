@@ -141,7 +141,6 @@ class DQNAgent:
         if model_path:
             # load from model_path
             self.saver.restore(self.sess, model_path)
-            global_step = int(model_path.split("-")[-1])
         else:
             # load from checkpoint
             checkpoint = tf.train.get_checkpoint_state(self.model_dir)
