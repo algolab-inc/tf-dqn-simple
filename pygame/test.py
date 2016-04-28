@@ -2,7 +2,6 @@ from __future__ import division
 
 import argparse
 
-import cv2
 import numpy as np
 import pygame
 
@@ -31,8 +30,7 @@ if __name__ == "__main__":
         # reset
         env.reset()
         screen_t_1, reward_t, terminal = env.observe()
-        screen_t_1 = cv2.cvtColor(cv2.resize(screen_t_1, (84, 84)), cv2.COLOR_BGR2GRAY)
-        _, screen_t_1 = cv2.threshold(screen_t_1, 1, 255, cv2.THRESH_BINARY)
+        screen_t_1 = agent.process_image(screen_t_1)
         state_t_1 = np.stack((screen_t_1, screen_t_1, screen_t_1, screen_t_1), axis=2)
 
         while not terminal:
@@ -45,8 +43,7 @@ if __name__ == "__main__":
 
             # observe environment
             screen_t_1, reward_t, terminal = env.observe()
-            screen_t_1 = cv2.cvtColor(cv2.resize(screen_t_1, (84, 84)), cv2.COLOR_BGR2GRAY)
-            _, screen_t_1 = cv2.threshold(screen_t_1, 1, 255, cv2.THRESH_BINARY)
+            screen_t_1 = agent.process_image(screen_t_1)
             screen_t_1 = np.reshape(screen_t_1, (84, 84, 1))
             state_t_1 = np.append(screen_t_1, state_t[:, :, :3], axis=2)
 

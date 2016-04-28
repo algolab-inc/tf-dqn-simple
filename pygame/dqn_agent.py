@@ -1,6 +1,7 @@
 from collections import deque
 import os
 
+import cv2
 import numpy as np
 import tensorflow as tf
 
@@ -134,6 +135,11 @@ class DQNAgent:
 
         # for log
         self.current_loss = self.sess.run(self.loss, feed_dict={self.x: state_minibatch, self.y_: y_minibatch})
+
+    def process_image(self, image):
+        image = cv2.cvtColor(cv2.resize(image, (84, 84)), cv2.COLOR_BGR2GRAY)
+        _, image = cv2.threshold(image, 1, 255, cv2.THRESH_BINARY)
+        return image
 
     def load_model(self, model_path=None):
         global_step = 0
