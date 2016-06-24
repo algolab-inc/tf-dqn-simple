@@ -1,5 +1,5 @@
-# Basic Example
-![demo](https://raw.githubusercontent.com/algolab-inc/tf-dqn-simple/master/basic/demo-catch_ball.gif)
+# Tensorflow implementation of Simple DQN
+![demo](https://raw.githubusercontent.com/algolab-inc/tf-dqn-simple/master/demo-catch_ball.gif)
 
 ## Quick Start
 ```
