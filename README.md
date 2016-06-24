@@ -1,9 +1,30 @@
-# TensorFlow Deep Q-Network Examples
-## Basic
-![demo](https://raw.githubusercontent.com/algolab-inc/tensorflow-deep-q-network/master/basic/demo-catch_ball.gif)
+# Basic Example
+![demo](https://raw.githubusercontent.com/algolab-inc/tf-dqn-simple/master/basic/demo-catch_ball.gif)
 
-For more information, please see the [README](https://github.com/algolab-inc/tensorflow-deep-q-network/blob/master/basic/README.md).
+## Quick Start
+```
+git clone https://github.com/algolab-inc/tf-dqn-simple.git
+cd tf-dqn-simple
+python test.py -m models/pretrained/catch_ball.ckpt
+```
 
+## Usage
+### Train
+```
+python train.py
+```
 
-## Pygame
-For more information, please see the [README](https://github.com/algolab-inc/tensorflow-deep-q-network/blob/master/pygame/README.md).
+### Test
+```
+python test.py
+```
+
+### Test with trained model
+```
+python test.py -m models/pretrained/catch_ball.ckpt
+```
+
+## Requirements
+* TenforFlow
+* Matplotlib
+* ImageMagick (Optional)
