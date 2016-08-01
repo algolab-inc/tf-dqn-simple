@@ -67,6 +67,12 @@ target/
 # Pyenv
 .python-version
 
+<<<<<<< HEAD
 # tf-dqn-basic
 models
+=======
+# Local
+models/catch_ball/*
+tmp/*
+>>>>>>> 11c1324c9f260588c92c6a350d25facf74d8346e
 !.gitkeep
