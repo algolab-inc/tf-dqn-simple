@@ -1,0 +1,2 @@
+model_checkpoint_path: "/vagrant/tf-dqn-simple/models/catch_ball.ckpt"
+all_model_checkpoint_paths: "/vagrant/tf-dqn-simple/models/catch_ball.ckpt"
