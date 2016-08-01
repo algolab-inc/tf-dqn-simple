@@ -1,4 +1,4 @@
-# Tensorflow implementation of DQN
+# TensorFlow implementation of DQN
 ![demo](https://raw.githubusercontent.com/algolab-inc/tf-dqn-simple/master/demo-catch_ball.gif)
 
 ## Quick Start
