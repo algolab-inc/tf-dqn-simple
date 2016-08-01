@@ -68,5 +68,5 @@ target/
 .python-version
 
 # Local
-# models/*
+models/*
 !.gitkeep
