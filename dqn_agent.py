@@ -63,7 +63,7 @@ class DQNAgent:
 
         # session
         self.sess = tf.Session()
-        self.sess.run(tf.initialize_all_variables())
+        self.sess.run(tf.global_variables_initializer())
 
     def Q_values(self, state):
         # Q(state, action) of all actions
@@ -98,7 +98,7 @@ class DQNAgent:
                 y_j[action_j_index] = reward_j
             else:
                 # reward_j + gamma * max_action' Q(state', action')
-                y_j[action_j_index] = reward_j + self.discount_factor * np.max(self.Q_values(state_j_1))
+                y_j[action_j_index] = reward_j + self.discount_factor * np.max(self.Q_values(state_j_1))  # NOQA
 
             state_minibatch.append(state_j)
             y_minibatch.append(y_j)
